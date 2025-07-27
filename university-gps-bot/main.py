@@ -1,17 +1,11 @@
-HEADERS = {
-    "Authorization": f"Bearer EAARtn5xSbEsBPDaNIAz2nhQyUwJ4cjMTtINcdy1o7IkLcLvuHFsMfk6ZBFpZAJAz5RL5Vz3lnWERTrdA4ZA2tZA85JLCwWAXsktLrSBm3KgacIHemDObEIj3gZBathVCVbvZAhbQ4TJseZAAs69Vnd9eZC2NGylC2tfpNMS4X9ATLF6jTCUfqSHmOUPrNZCvWkB5SSgZDZD",
-    "Content-Type": "application/json"
-}
-
-
 from fastapi import FastAPI, Request
 from geopy.distance import geodesic
 import requests
-import os
+from datetime import datetime
 
 app = FastAPI()
 
-# UBIT k cords
+# UBIT coordinates
 UNI_LAT, UNI_LON = 24.94557432346588, 67.115382
 
 # WhatsApp Cloud API credentials
@@ -19,8 +13,18 @@ WHATSAPP_API_URL = "https://graph.facebook.com/v22.0/715095305022325/messages"
 MOM_PHONE = "whatsapp:+923403553839"
 DAD_PHONE = "whatsapp:+923332329158"
 
+HEADERS = {
+    "Authorization": f"Bearer EAARtn5xSbEsBPDaNIAz2nhQyUwJ4cjMTtINcdy1o7IkLcLvuHFsMfk6ZBFpZAJAz5RL5Vz3lnWERTrdA4ZA2tZA85JLCwWAXsktLrSBm3KgacIHemDObEIj3gZBathVCVbvZAhbQ4TJseZAAs69Vnd9eZC2NGylC2tfpNMS4X9ATLF6jTCUfqSHmOUPrNZCvWkB5SSgZDZD",
+    "Content-Type": "application/json"
+}
+
+# Global variable to store last message date
+last_sent_date = None
+
 @app.post("/location")
 async def receive_location(request: Request):
+    global last_sent_date
+
     data = await request.json()
     lat = data.get("lat")
     lon = data.get("lon")
@@ -33,14 +37,23 @@ async def receive_location(request: Request):
     distance = geodesic(user_coords, campus_coords).meters
     print(f"Distance to university: {distance}m")
 
+    today = datetime.now().date()
+
     if distance < 300:
-        # Use template message
+        if last_sent_date == today:
+            print("Already sent today. Skipping message.")
+            return {"status": "Message already sent today."}
+
+        # Update last sent date
+        last_sent_date = today
+
+        # Send template message
         template_message = {
             "messaging_product": "whatsapp",
             "to": MOM_PHONE,
             "type": "template",
             "template": {
-                "name": "arrival_notification", 
+                "name": "arrival_notification",
                 "language": {"code": "ur"}
             }
         }
