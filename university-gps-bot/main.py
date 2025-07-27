@@ -36,7 +36,7 @@ async def receive_location(request: Request):
         }
     
         headers = {
-            "Authorization": "Bearer EAARtn5xSbEsBPIICvBaHbxS3ZCsLmqVJuEO1VRF6DwQekZBKJk9D0RlidYypCfD2sWL1O9Y1u0Sc45bqUdxw7GzmSVZBz0tlziUbEY4dz0aKylZCYWMiYu7ylARk89MmLbsgn2nLuGZC9YPfqqrpuZBb4uaRNus6VxjKK21dFLLSQM48gUhLG2Iqr0vzrg27XDBmQTuTXup59dgZA4cdCfWzLLnCGgJBFLHGmejeWlhZCGZBssVoZD",
+            "Authorization": "Bearer EAARtn5xSbEsBPDaNIAz2nhQyUwJ4cjMTtINcdy1o7IkLcLvuHFsMfk6ZBFpZAJAz5RL5Vz3lnWERTrdA4ZA2tZA85JLCwWAXsktLrSBm3KgacIHemDObEIj3gZBathVCVbvZAhbQ4TJseZAAs69Vnd9eZC2NGylC2tfpNMS4X9ATLF6jTCUfqSHmOUPrNZCvWkB5SSgZDZD",
             "Content-Type": "application/json"
         }
     
