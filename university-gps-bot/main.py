@@ -28,27 +28,28 @@ async def receive_location(request: Request):
     print(f"Distance to university: {distance}m")
 
     if distance < 300:
-        message = {
+        # Use template message
+        template_message = {
             "messaging_product": "whatsapp",
             "to": MOM_PHONE,
-            "type": "text",
-            "text": {"body": "Mein pohanch gaya hoon"},
+            "type": "template",
+            "template": {
+                "name": "arrival_notification", 
+                "language": {
+                    "code": "en_US"  # or 'ur' if your template is in Urdu
+                }
+            }
         }
-    
-        headers = {
-            "Authorization": "Bearer EAARtn5xSbEsBPDaNIAz2nhQyUwJ4cjMTtINcdy1o7IkLcLvuHFsMfk6ZBFpZAJAz5RL5Vz3lnWERTrdA4ZA2tZA85JLCwWAXsktLrSBm3KgacIHemDObEIj3gZBathVCVbvZAhbQ4TJseZAAs69Vnd9eZC2NGylC2tfpNMS4X9ATLF6jTCUfqSHmOUPrNZCvWkB5SSgZDZD",
-            "Content-Type": "application/json"
-        }
-    
-        response1 = requests.post(WHATSAPP_API_URL, json=message, headers=headers)
+
+        response1 = requests.post(WHATSAPP_API_URL, json=template_message, headers=HEADERS)
         print("Mom response:", response1.status_code, response1.text)
-    
-        message["to"] = DAD_PHONE
-        response2 = requests.post(WHATSAPP_API_URL, json=message, headers=headers)
+
+        template_message["to"] = DAD_PHONE
+        response2 = requests.post(WHATSAPP_API_URL, json=template_message, headers=HEADERS)
         print("Dad response:", response2.status_code, response2.text)
-        
+
         return {
-            "status": "Message sent to both",
+            "status": "Template message sent to both",
             "mom_response": response1.json(),
             "dad_response": response2.json()
         }
