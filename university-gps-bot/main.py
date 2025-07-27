@@ -29,24 +29,23 @@ async def receive_location(request: Request):
     print(f"Distance to university: {distance}m")
 
     if distance < 300:
-    message = {
-        "messaging_product": "whatsapp",
-        "to": MOM_PHONE,
-        "type": "text",
-        "text": {"body": "Mein pohanch gaya hoon"},
-    }
-
-    headers = {
-        "Authorization": f"Bearer {ACCESS_TOKEN}",
-        "Content-Type": "application/json"
-    }
-
-    response1 = requests.post(WHATSAPP_API_URL, json=message, headers=headers)
-    print("Mom response:", response1.status_code, response1.text)
-
-    message["to"] = DAD_PHONE
-    response2 = requests.post(WHATSAPP_API_URL, json=message, headers=headers)
-    print("Dad response:", response2.status_code, response2.text)
-
+        message = {
+            "messaging_product": "whatsapp",
+            "to": MOM_PHONE,
+            "type": "text",
+            "text": {"body": "Mein pohanch gaya hoon"},
+        }
+    
+        headers = {
+            "Authorization": f"Bearer {ACCESS_TOKEN}",
+            "Content-Type": "application/json"
+        }
+    
+        response1 = requests.post(WHATSAPP_API_URL, json=message, headers=headers)
+        print("Mom response:", response1.status_code, response1.text)
+    
+        message["to"] = DAD_PHONE
+        response2 = requests.post(WHATSAPP_API_URL, json=message, headers=headers)
+        print("Dad response:", response2.status_code, response2.text)
 
     return {"status": f"Distance is {distance:.2f} meters"}
