@@ -41,9 +41,7 @@ async def receive_location(request: Request):
             "type": "template",
             "template": {
                 "name": "arrival_notification", 
-                "language": {
-                    "code": "en_US"  # or 'ur' if your template is in Urdu
-                }
+                "language": {"code": "ur"}
             }
         }
 
