@@ -28,30 +28,25 @@ async def receive_location(request: Request):
     distance = geodesic(user_coords, campus_coords).meters
     print(f"Distance to university: {distance}m")
 
-    if distance < 300:  # Less than 300 meters = Arrived
-        message = {
-            "messaging_product": "whatsapp",
-            "to": MOM_PHONE,
-            "type": "text",
-            "text": {"body": "Mein pohanch gaya hoon"},
-        }
+    if distance < 300:
+    message = {
+        "messaging_product": "whatsapp",
+        "to": MOM_PHONE,
+        "type": "text",
+        "text": {"body": "Mein pohanch gaya hoon"},
+    }
 
-        headers = {
-            "Authorization": f"Bearer {ACCESS_TOKEN}",
-            "Content-Type": "application/json"
-        }
+    headers = {
+        "Authorization": f"Bearer {ACCESS_TOKEN}",
+        "Content-Type": "application/json"
+    }
 
-        # Send to Mom
-        response1 = requests.post(WHATSAPP_API_URL, json=message, headers=headers)
+    response1 = requests.post(WHATSAPP_API_URL, json=message, headers=headers)
+    print("Mom response:", response1.status_code, response1.text)
 
-        # Send to Dad
-        message["to"] = DAD_PHONE
-        response2 = requests.post(WHATSAPP_API_URL, json=message, headers=headers)
+    message["to"] = DAD_PHONE
+    response2 = requests.post(WHATSAPP_API_URL, json=message, headers=headers)
+    print("Dad response:", response2.status_code, response2.text)
 
-        return {
-            "status": "Message sent to both",
-            "mom_response": response1.json(),
-            "dad_response": response2.json()
-        }
 
     return {"status": f"Distance is {distance:.2f} meters"}
