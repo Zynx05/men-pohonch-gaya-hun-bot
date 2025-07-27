@@ -11,7 +11,7 @@ UNI_LAT, UNI_LON = 24.94557432346588, 67.115382
 # WhatsApp Cloud API credentials
 WHATSAPP_API_URL = "https://graph.facebook.com/v22.0/715095305022325/messages"
 MOM_PHONE = "whatsapp:+923403553839"
-DAD_PHONE = "whatsapp:+923709203252"
+DAD_PHONE = "whatsapp:+923332329158"
 
 @app.post("/location")
 async def receive_location(request: Request):
