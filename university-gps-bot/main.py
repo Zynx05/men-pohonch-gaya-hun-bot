@@ -1,59 +1,57 @@
 from fastapi import FastAPI, Request
-from math import radians, cos, sin, asin, sqrt
-from datetime import datetime
+from geopy.distance import geodesic
 import requests
+import os
 
 app = FastAPI()
-last_sent = None
 
-# WhatsApp Credentials
-WHATSAPP_TOKEN = "EAARtn5xSbEsBPCkVdZA3TMP3thg1YNP6QYUxcfRBYveWRgIjwge7lvVbkFrDLwtj5CoLMu4b0jQqbpS8FsM1ZAiZAhKccgDs0RzWSuPgVXmMlrtXqufc4MNxg0638SJnyPRLfu0sLPZAZCk9Du9dZC52WZAXOHPiv2dRaZAtEZCDrCd8w90uSIcesbkvD937ZBQYLN6LkmK4FZC9GH6ErmL9FYXgWSuAyBsQTQ12JuzHeTrgdnKTAZDZD"
-PHONE_NUMBER_ID = "715095305022325"
-MOM = "whatsapp:+923403553839"
-DAD = "whatsapp:+923709203252"
+# Coordinates of your university
+UNI_LAT, UNI_LON = 24.94557432346588, 67.115382
 
-# Campus Coordinates
-UNI_LAT, UNI_LON = 24.9456521247406, 67.11538199559921
-
-def haversine(lat1, lon1, lat2, lon2):
-    R = 6371000
-    dlat = radians(lat2 - lat1)
-    dlon = radians(lon2 - lon1)
-    a = sin(dlat/2)**2 + cos(radians(lat1))*cos(radians(lat2))*sin(dlon/2)**2
-    return R * 2 * asin(sqrt(a))
-
-def send_whatsapp(text):
-    url = f"https://graph.facebook.com/v19.0/{PHONE_NUMBER_ID}/messages"
-    headers = {
-        "Authorization": f"Bearer {WHATSAPP_TOKEN}",
-        "Content-Type": "application/json"
-    }
-    for recipient in [MOM, DAD]:
-        payload = {
-            "messaging_product": "whatsapp",
-            "to": recipient,
-            "type": "text",
-            "text": {"body": text}
-        }
-        requests.post(url, headers=headers, json=payload)
+# WhatsApp Cloud API credentials (from your setup)
+WHATSAPP_API_URL = "https://graph.facebook.com/v19.0/715095305022325/messages"
+ACCESS_TOKEN = "EAARtn5xSbEsBPCkVdZA3TMP3thg1YNP6QYUxcfRBYveWRgIjwge7lvVbkFrDLwtj5CoLMu4b0jQqbpS8FsM1ZAiZAhKccgDs0RzWSuPgVXmMlrtXqufc4MNxg0638SJnyPRLfu0sLPZAZCk9Du9dZC52WZAXOHPiv2dRaZAtEZCDrCd8w90uSIcesbkvD937ZBQYLN6LkmK4FZC9GH6ErmL9FYXgWSuAyBsQTQ12JuzHeTrgdnKTAZDZD"
+MOM_PHONE = "whatsapp:+923403553839"
+DAD_PHONE = "whatsapp:+923709203252"
 
 @app.post("/location")
 async def receive_location(request: Request):
-    global last_sent
     data = await request.json()
     lat = data.get("lat")
     lon = data.get("lon")
 
     if not lat or not lon:
-        return {"status": "No coordinates received"}
+        return {"error": "Missing lat/lon"}
 
-    dist = haversine(float(lat), float(lon), UNI_LAT, UNI_LON)
-    print(f"Distance to university: {dist}m")
+    user_coords = (lat, lon)
+    campus_coords = (UNI_LAT, UNI_LON)
+    distance = geodesic(user_coords, campus_coords).meters
+    print(f"Distance to university: {distance}m")
 
-    today = datetime.now().date()
-    if dist < 200 and last_sent != today:
-        send_whatsapp("I’ve reached university 🎓")
-        last_sent = today
-        return {"status": "Message sent"}
+    if distance < 300:  # Less than 300 meters = Arrived
+        message = {
+            "messaging_product": "whatsapp",
+            "to": MOM_PHONE,
+            "type": "text",
+            "text": {"body": "Mein pohanch gaya hoon"},
+        }
 
-    return {"status": f"Distance is {int(dist)} meters, not close enough"}
+        headers = {
+            "Authorization": f"Bearer {ACCESS_TOKEN}",
+            "Content-Type": "application/json"
+        }
+
+        # Send to Mom
+        response1 = requests.post(WHATSAPP_API_URL, json=message, headers=headers)
+
+        # Send to Dad
+        message["to"] = DAD_PHONE
+        response2 = requests.post(WHATSAPP_API_URL, json=message, headers=headers)
+
+        return {
+            "status": "Message sent to both",
+            "mom_response": response1.json(),
+            "dad_response": response2.json()
+        }
+
+    return {"status": f"Distance is {distance:.2f} meters"}
