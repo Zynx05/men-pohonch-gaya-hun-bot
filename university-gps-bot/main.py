@@ -1,3 +1,9 @@
+HEADERS = {
+    "Authorization": f"Bearer EAARtn5xSbEsBPDaNIAz2nhQyUwJ4cjMTtINcdy1o7IkLcLvuHFsMfk6ZBFpZAJAz5RL5Vz3lnWERTrdA4ZA2tZA85JLCwWAXsktLrSBm3KgacIHemDObEIj3gZBathVCVbvZAhbQ4TJseZAAs69Vnd9eZC2NGylC2tfpNMS4X9ATLF6jTCUfqSHmOUPrNZCvWkB5SSgZDZD",
+    "Content-Type": "application/json"
+}
+
+
 from fastapi import FastAPI, Request
 from geopy.distance import geodesic
 import requests
