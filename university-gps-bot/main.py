@@ -34,7 +34,7 @@ async def receive_location(request: Request):
             "to": MOM_PHONE,
             "type": "template",
             "template": {
-                "name": "hello_world", 
+                "name": "arrival_notification", 
                 "language": {
                     "code": "en_US"  # or 'ur' if your template is in Urdu
                 }
