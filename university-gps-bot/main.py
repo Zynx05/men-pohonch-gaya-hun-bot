@@ -10,7 +10,6 @@ UNI_LAT, UNI_LON = 24.94557432346588, 67.115382
 
 # WhatsApp Cloud API credentials
 WHATSAPP_API_URL = "https://graph.facebook.com/v22.0/715095305022325/messages"
-ACCESS_TOKEN = "EAARtn5xSbEsBPCkVdZA3TMP3thg1YNP6QYUxcfRBYveWRgIjwge7lvVbkFrDLwtj5CoLMu4b0jQqbpS8FsM1ZAiZAhKccgDs0RzWSuPgVXmMlrtXqufc4MNxg0638SJnyPRLfu0sLPZAZCk9Du9dZC52WZAXOHPiv2dRaZAtEZCDrCd8w90uSIcesbkvD937ZBQYLN6LkmK4FZC9GH6ErmL9FYXgWSuAyBsQTQ12JuzHeTrgdnKTAZDZD"
 MOM_PHONE = "whatsapp:+923403553839"
 DAD_PHONE = "whatsapp:+923709203252"
 
@@ -37,7 +36,7 @@ async def receive_location(request: Request):
         }
     
         headers = {
-            "Authorization": f"Bearer {ACCESS_TOKEN}",
+            "Authorization": "Bearer EAARtn5xSbEsBPIICvBaHbxS3ZCsLmqVJuEO1VRF6DwQekZBKJk9D0RlidYypCfD2sWL1O9Y1u0Sc45bqUdxw7GzmSVZBz0tlziUbEY4dz0aKylZCYWMiYu7ylARk89MmLbsgn2nLuGZC9YPfqqrpuZBb4uaRNus6VxjKK21dFLLSQM48gUhLG2Iqr0vzrg27XDBmQTuTXup59dgZA4cdCfWzLLnCGgJBFLHGmejeWlhZCGZBssVoZD",
             "Content-Type": "application/json"
         }
     
