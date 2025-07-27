@@ -47,5 +47,11 @@ async def receive_location(request: Request):
         message["to"] = DAD_PHONE
         response2 = requests.post(WHATSAPP_API_URL, json=message, headers=headers)
         print("Dad response:", response2.status_code, response2.text)
+        
+        return {
+            "status": "Message sent to both",
+            "mom_response": response1.json(),
+            "dad_response": response2.json()
+        }
 
     return {"status": f"Distance is {distance:.2f} meters"}
