@@ -5,10 +5,10 @@ import os
 
 app = FastAPI()
 
-# Coordinates of your university
+# UBIT k cords
 UNI_LAT, UNI_LON = 24.94557432346588, 67.115382
 
-# WhatsApp Cloud API credentials (from your setup)
+# WhatsApp Cloud API credentials
 WHATSAPP_API_URL = "https://graph.facebook.com/v22.0/715095305022325/messages"
 ACCESS_TOKEN = "EAARtn5xSbEsBPCkVdZA3TMP3thg1YNP6QYUxcfRBYveWRgIjwge7lvVbkFrDLwtj5CoLMu4b0jQqbpS8FsM1ZAiZAhKccgDs0RzWSuPgVXmMlrtXqufc4MNxg0638SJnyPRLfu0sLPZAZCk9Du9dZC52WZAXOHPiv2dRaZAtEZCDrCd8w90uSIcesbkvD937ZBQYLN6LkmK4FZC9GH6ErmL9FYXgWSuAyBsQTQ12JuzHeTrgdnKTAZDZD"
 MOM_PHONE = "whatsapp:+923403553839"
