@@ -40,7 +40,7 @@ async def receive_location(request: Request):
     
     # Check if already sent in the last 5 hours
     now = datetime.now()
-    if last_sent_time and now - last_sent_time < timedelta(hours=SEND_INTERVAL_HOURS):
+    if last_sent_date and now - last_sent_date < timedelta(hours=SEND_INTERVAL_HOURS):
         print("Message already sent in last 5 hours. Skipping.")
         return {"status": "Message recently sent. Skipped."}
 
