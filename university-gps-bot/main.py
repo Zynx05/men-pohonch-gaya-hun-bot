@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Request
 from geopy.distance import geodesic
 import requests
+import os
 from datetime import datetime
 
 app = FastAPI()
@@ -11,7 +12,7 @@ UNI_LAT, UNI_LON = 24.94557432346588, 67.115382
 # WhatsApp Cloud API credentials
 WHATSAPP_API_URL = "https://graph.facebook.com/v22.0/715095305022325/messages"
 MOM_PHONE = "whatsapp:+923403553839"
-DAD_PHONE = "whatsapp:+923332329158"
+DAD_PHONE = "whatsapp:+923709203252"
 
 HEADERS = {
     "Authorization": f"Bearer EAARtn5xSbEsBPDaNIAz2nhQyUwJ4cjMTtINcdy1o7IkLcLvuHFsMfk6ZBFpZAJAz5RL5Vz3lnWERTrdA4ZA2tZA85JLCwWAXsktLrSBm3KgacIHemDObEIj3gZBathVCVbvZAhbQ4TJseZAAs69Vnd9eZC2NGylC2tfpNMS4X9ATLF6jTCUfqSHmOUPrNZCvWkB5SSgZDZD",
@@ -36,8 +37,12 @@ async def receive_location(request: Request):
     campus_coords = (UNI_LAT, UNI_LON)
     distance = geodesic(user_coords, campus_coords).meters
     print(f"Distance to university: {distance}m")
-
-    today = datetime.now().date()
+    
+    # Check if already sent in the last 5 hours
+    now = datetime.now()
+    if last_sent_time and now - last_sent_time < timedelta(hours=SEND_INTERVAL_HOURS):
+        print("Message already sent in last 5 hours. Skipping.")
+        return {"status": "Message recently sent. Skipped."}
 
     if distance < 300:
         if last_sent_date == today:
